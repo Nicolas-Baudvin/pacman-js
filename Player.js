@@ -10,8 +10,10 @@ class Player {
         this.leftPressed = false;
         this.upPressed = false;
         this.downPressed = false;
+
         window.addEventListener('keydown', this.keyDownHandler, false);
         window.addEventListener('keyup', this.KeyUpHandler, false);
+
         this.dir = -10
         this.pctOpen = 100;
         this.fltOpen = this.pctOpen / 100;
@@ -68,6 +70,9 @@ class Player {
         return this.y
     }
 
+    /**
+     *  Dessin du modèle joueur
+     */
     draw = () => {
         console.log(this.x, this.y)
         let ctx = this.canvas.getContext("2d");
@@ -101,14 +106,20 @@ class Player {
         if (this.rightPressed) {
             ctx.clearRect(this.x - 30 - 1, this.y - 30 - 1, 30 * 2 + 2, 30 * 2 + 2);
             this.x += 4;
+            /**
+             * Logique de vérification d'une collision avec le rebord.
+             */
             if (this.x + 30 > this.canvas.width) {
                 this.x = this.canvas.width - 30
             }
+            /**
+             * Logique de vérification d'une collision avec un ennemi.
+             */
             hostiles.forEach((hostile) => {
 
-                if (this.x + 30 > hostile.getPosX() && this.x + 30 < hostile.getPosX() + 60) {
+                if (this.x + 30 > hostile.getPosX() && this.x + 30 < hostile.getPosX() + 60) { // 60 correspond ici à la largeur de l'image svg
 
-                    if (this.y + 30 < hostile.getPosY() + 60) { // 60 is the hostile width and height
+                    if (this.y + 30 < hostile.getPosY() + 60) { // 60 correspond ici à la hauteur de l'image svg
                         if (this.y + 30 > hostile.getPosY()) {
                             this.x = hostile.getPosX() - 30;
                         }
@@ -273,7 +284,7 @@ class Player {
     getHit = (damage) => {
         this.life = this.life - damage;
         if (this.life <= 0) {
-            console.log('PERDU LOL');
+            console.log('PERDU');
             return this.life;
         }
     }
