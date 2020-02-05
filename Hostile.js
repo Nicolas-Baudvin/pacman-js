@@ -22,8 +22,20 @@ class Hostile {
             console.log(this.img.width, this.img.height)
     }
 
-    move = () => {
+    moveRight = () => {
 
+    }
+
+    moveLeft = () => {
+
+    }
+
+    moveUp = () => {
+
+    }
+
+    moveDown = () => {
+        
     }
 
     getPosX = () => {
