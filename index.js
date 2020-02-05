@@ -22,10 +22,8 @@ var app = {
             let posX
             switch (name) {
                 case "blinky": {
-                    // posX = 580;
-                    // posY = 383
-                    posX = app.canvas.width / 2 - 400;
-                    posY = app.canvas.height - 160
+                    posX = 580;
+                    posY = 383
                     break;
                 }
                 case "clyde": {
@@ -49,8 +47,8 @@ var app = {
             }
 
             let hostile = new Hostile(posX, posY, name);
-            console.log(name)
             app.hostiles.push(hostile);
+            let largeur = app.canvas.width + app.hostiles[0].getPosX();
         })
 
     },
