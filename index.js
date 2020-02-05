@@ -1,5 +1,6 @@
 var app = {
     canvas: document.querySelector('#canvas'),
+    map: '',
     x: '',
     y: '',
     currentPlayer: '',
@@ -9,9 +10,6 @@ var app = {
 
     init: () => {
         console.log('init');
-        window.addEventListener('mousemove', (e) => {
-            console.log("largeur", e.clientX, "hauteur", e.clientY);
-        })
         app.displayMap();
         app.x = app.canvas.width / 2;
         app.y = app.canvas.height - 60;
@@ -20,8 +18,6 @@ var app = {
         app.currentPlayer = new Player(100, app.canvas.width / 2, app.canvas.height - 60);
 
         app.hostilesName.forEach((name) => {
-            // const posY = Math.floor(Math.random() * app.canvas.height);
-            // const posX = Math.floor(Math.random() * app.canvas.width);
             let posY;
             let posX
             switch (name) {
@@ -129,6 +125,7 @@ var app = {
         ];
 
         const map = new Map(mapData);
+        app.map = map;
     }
 
 }
