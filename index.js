@@ -22,8 +22,10 @@ var app = {
             let posX
             switch (name) {
                 case "blinky": {
-                    posX = 580;
-                    posY = 383
+                    // posX = 580;
+                    // posY = 383
+                    posX = app.canvas.width / 2 - 400;
+                    posY = app.canvas.height - 160
                     break;
                 }
                 case "clyde": {
