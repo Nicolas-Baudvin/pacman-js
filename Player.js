@@ -11,6 +11,8 @@ class Player {
         this.upPressed = false;
         this.downPressed = false;
         this.speed = 4;
+        this.height = 30;
+        this.width = 30;
 
         window.addEventListener('keydown', this.keyDownHandler, false);
         window.addEventListener('keyup', this.KeyUpHandler, false);
@@ -80,7 +82,7 @@ class Player {
         if (!this.isDraw) {
 
             ctx.beginPath();
-            ctx.arc(this.x, this.y, 20, (this.fltOpen * 0.2) * Math.PI, (2 - this.fltOpen * 0.2) * Math.PI);
+            ctx.arc(this.x, this.y, 30, (this.fltOpen * 0.2) * Math.PI, (2 - this.fltOpen * 0.2) * Math.PI);
             ctx.lineTo(this.x, this.y);
             ctx.closePath();
             ctx.fillStyle = "#FF0";
@@ -100,75 +102,179 @@ class Player {
         }, 10);
     }
 
-    checkCollisionWithMap = () => {
+    checkCollisionWithMap = (width, height, maxPosX, maxPosY) => {
+        /**
+         * Logique de vérification de collision avec un mur
+         */
+        let ctx = this.canvas.getContext("2d");
+        const pix = ctx.getImageData(
+            this.rightPressed ? this.x + maxPosX : this.x - maxPosX,
+            this.downPressed ? this.y + maxPosY : this.y - maxPosY,
+            width,
+            height
+        );
+
+        let rgba = [];
+
+        for (let i = 0; i < pix.data.length; i += 4) {
+            const red = pix.data[i];
+            const green = pix.data[i + 1];
+            const blue = pix.data[i + 2];
+            const alpha = pix.data[i + 3];
+            const array = [red, green, blue, alpha];
+            rgba.push(array);
+        }
+        if (rgba[0][0] === 0 && rgba[0][1] === 0 && rgba[0][2] === 0 && rgba[0][3] === 255) {
+            return true;
+        }
+        else if (rgba[Math.floor(rgba.length / 2)][0] === 0 && rgba[Math.floor(rgba.length / 2)][1] === 0 && rgba[Math.floor(rgba.length / 2)][2] === 0 && rgba[Math.floor(rgba.length / 2)][3] === 255) {
+            return true
+        }
+        else if (rgba[rgba.length - 1][0] === 0 && rgba[rgba.length - 1][1] === 0 && rgba[rgba.length - 1][2] === 0 && rgba[rgba.length - 1][3] === 255) {
+
+            return true;
+        }
+        else if (rgba[0][0] !== 255 && rgba[0][1] !== 255 && rgba[0][2] !== 255 && rgba[0][3] !== 255) {
+            if (rgba[0][0] !== 0 && rgba[0][1] !== 0 && rgba[0][2] !== 0 && rgba[0][3] !== 0) {
+                console.log(rgba[0][0], rgba[0][1], rgba[0][2], rgba[0][3])
+                return true;
+            }
+        }
+        else {
+            return false;
+        }
 
     }
 
-    checkCollisionWithHostiles = () => {
-        
+    checkCollisionWithHostiles = (
+        playerWidth = 30,
+        playerHeight = 30,
+        hostileWidth = 60,
+        hostileHeight = 60
+    ) => {
+        const hostiles = app.hostiles;
+
+        hostiles.forEach((hostile) => {
+
+            if (this.rightPressed && !this.upPressed && !this.leftPressed && !this.downPressed) {
+                if (this.x + playerWidth > hostile.getPosX() && this.x + playerWidth < hostile.getPosX() + hostileWidth) {
+                    if (this.y + playerHeight < hostile.getPosY() + hostileHeight) {
+                        if (this.y + playerHeight > hostile.getPosY()) {
+                            this.x = hostile.getPosX() - playerWidth;
+                        }
+                        if (this.y + playerHeight === hostile.getPosY() + hostileHeight) {
+                            this.x = hostile.getPosX() - playerWidth;
+                        }
+                    }
+
+                    if (this.y - playerHeight < hostile.getPosY() + hostileHeight) {
+                        if (this.y - playerHeight > hostile.getPosY()) {
+                            this.x = hostile.getPosX() - playerWidth;
+                        }
+                        if (this.y - playerHeight === hostile.getPosY()) {
+                            this.x = hostile.getPosX() - playerWidth;
+                        }
+                    }
+                }
+            }
+
+            else if (this.leftPressed && !this.upPressed && !this.downPressed && !this.rightPressed) {
+
+                if (this.x - playerWidth < hostile.getPosX() + hostileWidth && this.x - playerWidth > hostile.getPosX()) {
+
+                    if (this.y + playerHeight < hostile.getPosY() + hostileHeight) {
+                        if (this.y + playerHeight > hostile.getPosY()) {
+                            this.x = hostile.getPosX() + hostileWidth + playerWidth;
+                        }
+                        if (this.y + playerHeight === hostile.getPosY() + hostileHeight) {
+                            this.x = hostile.getPosX() + hostileWidth + playerWidth;
+                        }
+                    }
+
+                    if (this.y - playerHeight < hostile.getPosY() + hostileHeight) {
+                        if (this.y - playerHeight > hostile.getPosY()) {
+                            this.x = hostile.getPosX() + hostileWidth + playerWidth;
+                        }
+                        if (this.y - playerHeight === hostile.getPosY()) {
+                            this.x = hostile.getPosX() + hostileWidth + playerWidth;
+                        }
+                    }
+                }
+            }
+            else if (this.upPressed && !this.downPressed && !this.leftPressed && !this.rightPressed) {
+
+                if (this.y - playerHeight < hostile.getPosY() + hostileHeight && this.y + playerHeight > hostile.getPosY()) {
+
+                    if (this.x - playerWidth > hostile.getPosX()) {
+                        if (this.x - playerWidth < hostile.getPosX() + hostileWidth) {
+                            this.y = hostile.getPosY() + hostileHeight + playerHeight;
+                        }
+                        if (this.x - playerWidth === hostile.getPosX()) {
+                            this.y = hostile.getPosY() + hostileHeight + playerHeight;
+                        }
+                    }
+
+                    if (this.x + playerWidth > hostile.getPosX()) {
+                        if (this.x + playerWidth < hostile.getPosX() + hostileWidth - 1) {
+                            this.y = hostile.getPosY() + hostileHeight + playerHeight;
+                        }
+                        if (this.x + playerWidth === hostile.getPosX() + hostileWidth) {
+                            this.y = hostile.getPosY() + hostileHeight + playerHeight;
+                        }
+                    }
+                }
+
+            }
+            else if (this.downPressed && !this.upPressed && !this.leftPressed && !this.rightPressed) {
+
+                if (this.y + playerHeight > hostile.getPosY() && this.y - playerHeight < hostile.getPosY() + hostileHeight) {
+
+                    if (this.x - playerWidth > hostile.getPosX()) {
+                        if (this.x - playerWidth < hostile.getPosX() + hostileWidth) {
+                            this.y = hostile.getPosY() - playerHeight;
+                        }
+                        if (this.x - playerWidth === hostile.getPosX()) {
+                            this.y = hostile.getPosY() - playerHeight;
+                        }
+                    }
+
+                    if (this.x + playerWidth > hostile.getPosX()) {
+                        if (this.x + playerWidth < hostile.getPosX() + hostileWidth) {
+                            this.y = hostile.getPosY() - playerHeight;
+                        }
+                        if (this.x + playerWidth === hostile.getPosX() + hostileWidth) {
+                            this.y = hostile.getPosY() - playerHeight;
+                        }
+                    }
+                }
+
+            }
+
+        });
+
     }
 
     move = () => {
         let ctx = this.canvas.getContext("2d");
-        const hostiles = app.hostiles;
-        if (this.rightPressed) {
-            ctx.clearRect(this.x - 20 - 1, this.y - 20 - 1, 20 * 2 + 2, 20 * 2 + 2);
+        if (this.rightPressed && !this.upPressed && !this.leftPressed && !this.downPressed) {
+            ctx.clearRect(this.x - this.width - 1, this.y - this.height - 1, this.width * 2 + 2, this.height * 2 + 2);
 
             /**
              * Logique de vérification d'une collision avec le rebord.
              */
-            if (this.x + 20 > this.canvas.width) {
-                this.x = this.canvas.width - 20
+            if (this.x + this.width > this.canvas.width) {
+                this.x = this.canvas.width - this.width
             }
             /**
              * Logique de vérification d'une collision avec un ennemi.
+             * TODO: Régler les bugs de collision
              */
-            hostiles.forEach((hostile) => {
-
-                if (this.x + 20 > hostile.getPosX() && this.x + 20 < hostile.getPosX() + 60) { // 60 correspond ici à la largeur de l'image svg
-
-                    if (this.y + 20 < hostile.getPosY() + 60) { // 60 correspond ici à la hauteur de l'image svg
-                        if (this.y + 20 > hostile.getPosY()) {
-                            this.x = hostile.getPosX() - 20;
-                        }
-                        if (this.y + 20 === hostile.getPosY() + 60) {
-                            this.x = hostile.getPosX() - 20;
-                        }
-                    }
-
-                    if (this.y - 20 < hostile.getPosY() + 60) {
-                        if (this.y - 20 > hostile.getPosY()) {
-                            this.x = hostile.getPosX() - 20;
-                        }
-                        if (this.y - 20 === hostile.getPosY()) {
-                            this.x = hostile.getPosX() - 20;
-                        }
-                    }
-                }
-            });
+            this.checkCollisionWithHostiles();
 
             /**
              * Logique de vérification de collision avec un mur
              */
-            const pix = ctx.getImageData(this.x + 25, this.y - 21, 1, 42);
-            let rgba = [];
-
-            for (let i = 0; i < pix.data.length; i += 4) {
-                const red = pix.data[i];
-                const green = pix.data[i + 1];
-                const blue = pix.data[i + 2];
-                const alpha = pix.data[i + 3];
-                const array = [red, green, blue, alpha];
-                rgba.push(array);
-            }
-            if (rgba[0][0] === 0 && rgba[0][1] === 0 && rgba[0][2] === 0 && rgba[0][3] === 255) {
-                this.speed = 0;
-            }
-            else if (rgba[Math.floor(rgba.length / 2)][0] === 0 && rgba[Math.floor(rgba.length / 2)][1] === 0 && rgba[Math.floor(rgba.length / 2)][2] === 0 && rgba[Math.floor(rgba.length / 2)][3] === 255) {
-                this.speed = 0;
-            }
-            else if (rgba[rgba.length - 1][0] === 0 && rgba[rgba.length - 1][1] === 0 && rgba[rgba.length - 1][2] === 0 && rgba[rgba.length - 1][3] === 255) {
-
+            if (this.checkCollisionWithMap(1, 62, 35, 31)) {
                 this.speed = 0;
             }
             else {
@@ -182,9 +288,10 @@ class Player {
 
             /**
              * On redessine le joueur avec les nouvelles coordonnées s'il n'y a pas d'obstacle sur le chemin
+             * en appliquant l'animation que l'on avance ou non
              */
             ctx.beginPath();
-            ctx.arc(this.x, this.y, 20, (this.fltOpen * 0.2) * Math.PI, (2 - this.fltOpen * 0.2) * Math.PI);
+            ctx.arc(this.x, this.y, this.width, (this.fltOpen * 0.2) * Math.PI, (2 - this.fltOpen * 0.2) * Math.PI);
 
             ctx.lineTo(this.x, this.y);
             ctx.closePath();
@@ -195,63 +302,25 @@ class Player {
             ctx.strokeStyle = '#000';
             ctx.stroke();
         }
-        else if (this.leftPressed) {
-            ctx.clearRect(this.x - 20 - 1, this.y - 20 - 1, 20 * 2 + 2, 20 * 2 + 2);
+        else if (this.leftPressed && !this.upPressed && !this.downPressed && !this.rightPressed) {
+            ctx.clearRect(this.x - this.width - 1, this.y - this.height - 1, this.width * 2 + 2, this.height * 2 + 2);
 
-            if (this.x - 20 < 0) {
-                this.x = 20
+            if (this.x - this.width < 0) {
+                this.x = this.width
             }
 
-            hostiles.forEach((hostile) => {
+            this.checkCollisionWithHostiles();
 
-                if (this.x - 20 < hostile.getPosX() + 60 && this.x - 20 > hostile.getPosX()) {
-
-                    if (this.y + 20 < hostile.getPosY() + 60) {
-                        if (this.y + 20 > hostile.getPosY()) {
-                            this.x = hostile.getPosX() + 90;
-                        }
-                        if (this.y + 20 === hostile.getPosY() + 60) {
-                            this.x = hostile.getPosX() + 90;
-                        }
-                    }
-
-                    if (this.y - 20 < hostile.getPosY() + 60) {
-                        if (this.y - 20 > hostile.getPosY()) {
-                            this.x = hostile.getPosX() + 90;
-                        }
-                        if (this.y - 20 === hostile.getPosY()) {
-                            this.x = hostile.getPosX() + 90;
-                        }
-                    }
-                }
-            });
-
-            const pix = ctx.getImageData(this.x - 25, this.y - 21, 1, 42);
-            let rgba = [];
-            for (let i = 0; i < pix.data.length; i += 4) {
-                const red = pix.data[i];
-                const green = pix.data[i + 1];
-                const blue = pix.data[i + 2];
-                const alpha = pix.data[i + 3];
-                const array = [red, green, blue, alpha];
-                rgba.push(array);
-            }
-
-            if (rgba[0][0] === 0 && rgba[0][1] === 0 && rgba[0][2] === 0 && rgba[0][3] === 255) {
-                this.speed = 0;
-            }
-            else if (rgba[Math.floor(rgba.length / 2)][0] === 0 && rgba[Math.floor(rgba.length / 2)][1] === 0 && rgba[Math.floor(rgba.length / 2)][2] === 0 && rgba[Math.floor(rgba.length / 2)][3] === 255) {
-                this.speed = 0;
-            }
-            else if (rgba[rgba.length - 1][0] === 0 && rgba[rgba.length - 1][1] === 0 && rgba[rgba.length - 1][2] === 0 && rgba[rgba.length - 1][3] === 255) {
+            if (this.checkCollisionWithMap(1, 62, 35, 31)) {
                 this.speed = 0;
             }
             else {
                 this.speed = 4;
             }
+
             this.x -= this.speed;
             ctx.beginPath();
-            ctx.arc(this.x, this.y, 20, (1 + this.fltOpen * 0.2) * Math.PI, (3 - this.fltOpen * 0.2) * Math.PI);
+            ctx.arc(this.x, this.y, this.width, (1 + this.fltOpen * 0.2) * Math.PI, (3 - this.fltOpen * 0.2) * Math.PI);
 
             ctx.lineTo(this.x, this.y);
             ctx.closePath();
@@ -262,57 +331,16 @@ class Player {
             ctx.strokeStyle = '#000';
             ctx.stroke();
         }
-        else if (this.upPressed) {
-            ctx.clearRect(this.x - 20 - 1, this.y - 20 - 1, 20 * 2 + 2, 20 * 2 + 2);
+        else if (this.upPressed && !this.downPressed && !this.leftPressed && !this.rightPressed) {
+            ctx.clearRect(this.x - this.width - 1, this.y - this.height - 1, this.width * 2 + 2, this.height * 2 + 2);
 
-            if (this.y - 20 < 0) {
-                this.y = 20;
+            if (this.y - this.height < 0) {
+                this.y = this.height;
             }
 
-            hostiles.forEach((hostile) => {
+            this.checkCollisionWithHostiles();
 
-                if (this.y - 20 < hostile.getPosY() + 60 && this.y + 20 > hostile.getPosY()) {
-
-                    if (this.x - 20 > hostile.getPosX()) {
-                        if (this.x - 20 < hostile.getPosX() + 60) {
-                            this.y = hostile.getPosY() + 90;
-                        }
-                        if (this.x - 20 === hostile.getPosX()) {
-                            this.y = hostile.getPosY() + 90;
-                        }
-
-                    }
-
-                    if (this.x + 20 > hostile.getPosX()) {
-                        if (this.x + 20 < hostile.getPosX() + 59) {
-                            this.y = hostile.getPosY() + 90;
-                        }
-                        if (this.x + 20 === hostile.getPosX() + 60) {
-                            this.y = hostile.getPosY() + 90;
-                        }
-                    }
-
-                }
-            });
-
-            const pix = ctx.getImageData(this.x - 21, this.y - 27, 42, 1);
-            let rgba = [];
-
-            for (let i = 0; i < pix.data.length; i += 4) {
-                const red = pix.data[i];
-                const green = pix.data[i + 1];
-                const blue = pix.data[i + 2];
-                const alpha = pix.data[i + 3];
-                const array = [red, green, blue, alpha];
-                rgba.push(array);
-            }
-            if (rgba[0][0] === 0 && rgba[0][1] === 0 && rgba[0][2] === 0 && rgba[0][3] === 255) {
-                this.speed = 0;
-            }
-            else if (rgba[Math.floor(rgba.length / 2)][0] === 0 && rgba[Math.floor(rgba.length / 2)][1] === 0 && rgba[Math.floor(rgba.length / 2)][2] === 0 && rgba[Math.floor(rgba.length / 2)][3] === 255) {
-                this.speed = 0;
-            }
-            else if (rgba[rgba.length - 1][0] === 0 && rgba[rgba.length - 1][1] === 0 && rgba[rgba.length - 1][2] === 0 && rgba[rgba.length - 1][3] === 255) {
+            if (this.checkCollisionWithMap(62, 1, 31, 37)) {
                 this.speed = 0;
             }
             else {
@@ -321,7 +349,7 @@ class Player {
 
             this.y -= this.speed;
             ctx.beginPath();
-            ctx.arc(this.x, this.y, 20, (1.511 + this.fltOpen * 0.2) * Math.PI, (1.5 - this.fltOpen * 0.2) * Math.PI);
+            ctx.arc(this.x, this.y, this.width, (1.511 + this.fltOpen * 0.2) * Math.PI, (1.5 - this.fltOpen * 0.2) * Math.PI);
 
             ctx.lineTo(this.x, this.y);
             ctx.closePath();
@@ -332,65 +360,24 @@ class Player {
             ctx.strokeStyle = '#000';
             ctx.stroke();
         }
-        else if (this.downPressed) {
-            ctx.clearRect(this.x - 20 - 1, this.y - 20 - 1, 20 * 2 + 2, 20 * 2 + 2);
-            if (this.y + 20 > this.canvas.height) {
-                this.y = this.canvas.height - 20
+        else if (this.downPressed && !this.upPressed && !this.leftPressed && !this.rightPressed) {
+            ctx.clearRect(this.x - this.width - 1, this.y - this.height - 1, this.width * 2 + 2, this.height * 2 + 2);
+            if (this.y + 30 > this.canvas.height) {
+                this.y = this.canvas.height - this.height
             }
 
-            hostiles.forEach((hostile) => {
+            this.checkCollisionWithHostiles();
 
-                if (this.y + 20 > hostile.getPosY() && this.y - 20 < hostile.getPosY() + 20) {
-
-                    if (this.x - 20 > hostile.getPosX()) {
-                        if (this.x - 20 < hostile.getPosX() + 59) {
-                            this.y = hostile.getPosY() - 31;
-                        }
-                        if (this.x - 20 === hostile.getPosX()) {
-                            this.y = hostile.getPosY() - 31;
-                        }
-                    }
-
-                    if (this.x + 20 > hostile.getPosX()) {
-                        if (this.x + 20 < hostile.getPosX() + 60) {
-                            this.y = hostile.getPosY() - 21;
-                        }
-                        if (this.x + 20 === hostile.getPosX() + 60) {
-                            this.y = hostile.getPosY() - 21;
-                        }
-                    }
-                }
-            })
-
-            const pix = ctx.getImageData(this.x - 21, this.y + 27, 42, 1);
-            let rgba = [];
-
-            for (let i = 0; i < pix.data.length; i += 4) {
-                const red = pix.data[i];
-                const green = pix.data[i + 1];
-                const blue = pix.data[i + 2];
-                const alpha = pix.data[i + 3];
-                const array = [red, green, blue, alpha];
-                rgba.push(array);
-            }
-            console.log(rgba[0][0] === 0 && rgba[0][1] === 0 && rgba[0][2] === 0 && rgba[0][3] === 255);
-            if (rgba[0][0] === 0 && rgba[0][1] === 0 && rgba[0][2] === 0 && rgba[0][3] === 255) {
-                this.speed = 0;
-            }
-            else if (rgba[Math.floor(rgba.length / 2)][0] === 0 && rgba[Math.floor(rgba.length / 2)][1] === 0 && rgba[Math.floor(rgba.length / 2)][2] === 0 && rgba[Math.floor(rgba.length / 2)][3] === 255) {
-                this.speed = 0;
-            }
-            else if (rgba[rgba.length - 1][0] === 0 && rgba[rgba.length - 1][1] === 0 && rgba[rgba.length - 1][2] === 0 && rgba[rgba.length - 1][3] === 255) {
+            if (this.checkCollisionWithMap(62, 1, 31, 37)) {
                 this.speed = 0;
             }
             else {
                 this.speed = 4;
             }
 
-
             this.y += this.speed;
             ctx.beginPath();
-            ctx.arc(this.x, this.y, 20, (0.5 + this.fltOpen * 0.2) * Math.PI, (2.5 - this.fltOpen * 0.2) * Math.PI);
+            ctx.arc(this.x, this.y, this.width, (0.5 + this.fltOpen * 0.2) * Math.PI, (2.5 - this.fltOpen * 0.2) * Math.PI);
 
             ctx.lineTo(this.x, this.y);
             ctx.closePath();
