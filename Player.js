@@ -11,8 +11,8 @@ class Player {
         this.upPressed = false;
         this.downPressed = false;
         this.speed = 4;
-        this.height = 30;
-        this.width = 30;
+        this.height = 20;
+        this.width = 20;
 
         window.addEventListener('keydown', this.keyDownHandler, false);
         window.addEventListener('keyup', this.KeyUpHandler, false);
@@ -82,7 +82,7 @@ class Player {
         if (!this.isDraw) {
 
             ctx.beginPath();
-            ctx.arc(this.x, this.y, 30, (this.fltOpen * 0.2) * Math.PI, (2 - this.fltOpen * 0.2) * Math.PI);
+            ctx.arc(this.x, this.y, this.width, (this.fltOpen * 0.2) * Math.PI, (2 - this.fltOpen * 0.2) * Math.PI);
             ctx.lineTo(this.x, this.y);
             ctx.closePath();
             ctx.fillStyle = "#FF0";
@@ -136,7 +136,6 @@ class Player {
         }
         else if (rgba[0][0] !== 255 && rgba[0][1] !== 255 && rgba[0][2] !== 255 && rgba[0][3] !== 255) {
             if (rgba[0][0] !== 0 && rgba[0][1] !== 0 && rgba[0][2] !== 0 && rgba[0][3] !== 0) {
-                console.log(rgba[0][0], rgba[0][1], rgba[0][2], rgba[0][3])
                 return true;
             }
         }
@@ -146,108 +145,111 @@ class Player {
 
     }
 
+    /**
+     * Logique de vérification d'une collision avec un ennemi.
+     */
     checkCollisionWithHostiles = (
-        playerWidth = 30,
-        playerHeight = 30,
+        playerWidth = 20,
+        playerHeight = 20,
         hostileWidth = 60,
         hostileHeight = 60
     ) => {
         const hostiles = app.hostiles;
-
         hostiles.forEach((hostile) => {
 
-            if (this.rightPressed && !this.upPressed && !this.leftPressed && !this.downPressed) {
-                if (this.x + playerWidth > hostile.getPosX() && this.x + playerWidth < hostile.getPosX() + hostileWidth) {
-                    if (this.y + playerHeight < hostile.getPosY() + hostileHeight) {
-                        if (this.y + playerHeight > hostile.getPosY()) {
-                            this.x = hostile.getPosX() - playerWidth;
-                        }
-                        if (this.y + playerHeight === hostile.getPosY() + hostileHeight) {
-                            this.x = hostile.getPosX() - playerWidth;
-                        }
+            if (
+                this.rightPressed || this.leftPressed ?
+                    (
+                        this.rightPressed ?
+                            this.x + playerWidth > hostile.getPosX() :
+                            this.x - playerWidth > hostile.getPosX()
+                    ) &&
+                    (
+                        this.rightPressed ?
+                            this.x + playerWidth < hostile.getPosX() + hostileWidth :
+                            this.x - playerWidth < hostile.getPosX() + hostileWidth
+                    ) :
+                    this.y - playerHeight < hostile.getPosY() + hostileHeight &&
+                    this.y + playerHeight > hostile.getPosY()
+            ) {
+
+                if (
+                    this.rightPressed || this.leftPressed ?
+                        this.y + playerHeight < hostile.getPosY() + hostileHeight :
+                        this.x - playerWidth > hostile.getPosX()
+                ) {
+
+                    if (this.leftPressed || this.rightPressed ?
+                        this.y + playerHeight > hostile.getPosY() :
+                        this.x - playerWidth < hostile.getPosX() + hostileWidth
+                    ) {
+                        this.leftPressed || this.rightPressed ?
+                            (this.rightPressed ?
+                                this.x = hostile.getPosX() - playerWidth :
+                                this.x = hostile.getPosX() + hostileWidth + playerWidth
+                            ) :
+                            (this.upPressed ?
+                                this.y = hostile.getPosY() + hostileHeight + playerHeight :
+                                this.y = hostile.getPosY() - playerHeight - 1
+                            )
                     }
 
-                    if (this.y - playerHeight < hostile.getPosY() + hostileHeight) {
-                        if (this.y - playerHeight > hostile.getPosY()) {
-                            this.x = hostile.getPosX() - playerWidth;
-                        }
-                        if (this.y - playerHeight === hostile.getPosY()) {
-                            this.x = hostile.getPosX() - playerWidth;
-                        }
-                    }
-                }
-            }
-
-            else if (this.leftPressed && !this.upPressed && !this.downPressed && !this.rightPressed) {
-
-                if (this.x - playerWidth < hostile.getPosX() + hostileWidth && this.x - playerWidth > hostile.getPosX()) {
-
-                    if (this.y + playerHeight < hostile.getPosY() + hostileHeight) {
-                        if (this.y + playerHeight > hostile.getPosY()) {
-                            this.x = hostile.getPosX() + hostileWidth + playerWidth;
-                        }
-                        if (this.y + playerHeight === hostile.getPosY() + hostileHeight) {
-                            this.x = hostile.getPosX() + hostileWidth + playerWidth;
-                        }
+                    if (this.leftPressed || this.rightPressed ?
+                        this.y + playerHeight === hostile.getPosY() + hostileHeight :
+                        this.x - playerWidth === hostile.getPosX()
+                    ) {
+                        this.leftPressed || this.rightPressed ?
+                            (this.rightPressed ?
+                                this.x = hostile.getPosX() - playerWidth :
+                                this.x = hostile.getPosX() + hostileWidth + playerWidth
+                            ) :
+                            (this.upPressed ?
+                                this.y = hostile.getPosY() + hostileHeight + playerHeight :
+                                this.y = hostile.getPosY() - playerHeight - 1
+                            )
                     }
 
-                    if (this.y - playerHeight < hostile.getPosY() + hostileHeight) {
-                        if (this.y - playerHeight > hostile.getPosY()) {
-                            this.x = hostile.getPosX() + hostileWidth + playerWidth;
-                        }
-                        if (this.y - playerHeight === hostile.getPosY()) {
-                            this.x = hostile.getPosX() + hostileWidth + playerWidth;
-                        }
-                    }
-                }
-            }
-            else if (this.upPressed && !this.downPressed && !this.leftPressed && !this.rightPressed) {
-
-                if (this.y - playerHeight < hostile.getPosY() + hostileHeight && this.y + playerHeight > hostile.getPosY()) {
-
-                    if (this.x - playerWidth > hostile.getPosX()) {
-                        if (this.x - playerWidth < hostile.getPosX() + hostileWidth) {
-                            this.y = hostile.getPosY() + hostileHeight + playerHeight;
-                        }
-                        if (this.x - playerWidth === hostile.getPosX()) {
-                            this.y = hostile.getPosY() + hostileHeight + playerHeight;
-                        }
-                    }
-
-                    if (this.x + playerWidth > hostile.getPosX()) {
-                        if (this.x + playerWidth < hostile.getPosX() + hostileWidth - 1) {
-                            this.y = hostile.getPosY() + hostileHeight + playerHeight;
-                        }
-                        if (this.x + playerWidth === hostile.getPosX() + hostileWidth) {
-                            this.y = hostile.getPosY() + hostileHeight + playerHeight;
-                        }
-                    }
                 }
 
-            }
-            else if (this.downPressed && !this.upPressed && !this.leftPressed && !this.rightPressed) {
+                if (
+                    this.leftPressed || this.rightPressed ?
+                        this.y - playerHeight < hostile.getPosY() + hostileHeight :
+                        this.x + playerWidth > hostile.getPosX()
+                ) {
 
-                if (this.y + playerHeight > hostile.getPosY() && this.y - playerHeight < hostile.getPosY() + hostileHeight) {
-
-                    if (this.x - playerWidth > hostile.getPosX()) {
-                        if (this.x - playerWidth < hostile.getPosX() + hostileWidth) {
-                            this.y = hostile.getPosY() - playerHeight;
-                        }
-                        if (this.x - playerWidth === hostile.getPosX()) {
-                            this.y = hostile.getPosY() - playerHeight;
-                        }
+                    if (
+                        this.rightPressed || this.leftPressed ?
+                            this.y - playerHeight > hostile.getPosY() :
+                            this.x + playerWidth < hostile.getPosX() + hostileWidth
+                    ) {
+                        this.leftPressed || this.rightPressed ?
+                            (this.rightPressed ?
+                                this.x = hostile.getPosX() - playerWidth :
+                                this.x = hostile.getPosX() + hostileWidth + playerWidth
+                            ) :
+                            (this.upPressed ?
+                                this.y = hostile.getPosY() + hostileHeight + playerHeight :
+                                this.y = hostile.getPosY() - playerHeight - 2
+                            )
                     }
 
-                    if (this.x + playerWidth > hostile.getPosX()) {
-                        if (this.x + playerWidth < hostile.getPosX() + hostileWidth) {
-                            this.y = hostile.getPosY() - playerHeight;
-                        }
-                        if (this.x + playerWidth === hostile.getPosX() + hostileWidth) {
-                            this.y = hostile.getPosY() - playerHeight;
-                        }
+                    if (
+                        this.leftPressed || this.rightPressed ?
+                            this.y - playerHeight === hostile.getPosY() :
+                            this.x + playerWidth === hostile.getPosX() + hostileWidth
+                    ) {
+                        this.leftPressed || this.rightPressed ?
+                            (this.rightPressed ?
+                                this.x = hostile.getPosX() - playerWidth :
+                                this.x = hostile.getPosX() + hostileWidth + playerWidth
+                            ) :
+                            (this.upPressed ?
+                                this.y = hostile.getPosY() + hostileHeight + playerHeight :
+                                this.y = hostile.getPosY() - playerHeight - 2
+                            )
                     }
+
                 }
-
             }
 
         });
@@ -257,6 +259,9 @@ class Player {
     move = () => {
         let ctx = this.canvas.getContext("2d");
         if (this.rightPressed && !this.upPressed && !this.leftPressed && !this.downPressed) {
+            /**
+             * On efface l'ancien dessin avant de le redessiner à ses nouvelles coordonnées
+             */
             ctx.clearRect(this.x - this.width - 1, this.y - this.height - 1, this.width * 2 + 2, this.height * 2 + 2);
 
             /**
@@ -265,16 +270,11 @@ class Player {
             if (this.x + this.width > this.canvas.width) {
                 this.x = this.canvas.width - this.width
             }
-            /**
-             * Logique de vérification d'une collision avec un ennemi.
-             * TODO: Régler les bugs de collision
-             */
-            this.checkCollisionWithHostiles();
 
             /**
              * Logique de vérification de collision avec un mur
              */
-            if (this.checkCollisionWithMap(1, 62, 35, 31)) {
+            if (this.checkCollisionWithMap(1, 42, 25, 21)) {
                 this.speed = 0;
             }
             else {
@@ -285,6 +285,11 @@ class Player {
              * On aditionne le vitesse aux coordonnées x ou y en fonction de la touche appuyée
              */
             this.x += this.speed;
+
+            /**
+             * Logique de vérification d'une collision avec un ennemi.
+             */
+            this.checkCollisionWithHostiles();
 
             /**
              * On redessine le joueur avec les nouvelles coordonnées s'il n'y a pas d'obstacle sur le chemin
@@ -309,9 +314,8 @@ class Player {
                 this.x = this.width
             }
 
-            this.checkCollisionWithHostiles();
 
-            if (this.checkCollisionWithMap(1, 62, 35, 31)) {
+            if (this.checkCollisionWithMap(1, 42, 25, 21)) {
                 this.speed = 0;
             }
             else {
@@ -319,6 +323,8 @@ class Player {
             }
 
             this.x -= this.speed;
+
+            this.checkCollisionWithHostiles();
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.width, (1 + this.fltOpen * 0.2) * Math.PI, (3 - this.fltOpen * 0.2) * Math.PI);
 
@@ -338,9 +344,8 @@ class Player {
                 this.y = this.height;
             }
 
-            this.checkCollisionWithHostiles();
 
-            if (this.checkCollisionWithMap(62, 1, 31, 37)) {
+            if (this.checkCollisionWithMap(42, 1, 21, 27)) {
                 this.speed = 0;
             }
             else {
@@ -348,6 +353,8 @@ class Player {
             }
 
             this.y -= this.speed;
+
+            this.checkCollisionWithHostiles();
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.width, (1.511 + this.fltOpen * 0.2) * Math.PI, (1.5 - this.fltOpen * 0.2) * Math.PI);
 
@@ -366,9 +373,8 @@ class Player {
                 this.y = this.canvas.height - this.height
             }
 
-            this.checkCollisionWithHostiles();
 
-            if (this.checkCollisionWithMap(62, 1, 31, 37)) {
+            if (this.checkCollisionWithMap(42, 1, 21, 27)) {
                 this.speed = 0;
             }
             else {
@@ -376,6 +382,7 @@ class Player {
             }
 
             this.y += this.speed;
+            this.checkCollisionWithHostiles();
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.width, (0.5 + this.fltOpen * 0.2) * Math.PI, (2.5 - this.fltOpen * 0.2) * Math.PI);
 
