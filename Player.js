@@ -100,6 +100,14 @@ class Player {
         }, 10);
     }
 
+    checkCollisionWithMap = () => {
+
+    }
+
+    checkCollisionWithHostiles = () => {
+        
+    }
+
     move = () => {
         let ctx = this.canvas.getContext("2d");
         const hostiles = app.hostiles;
@@ -166,8 +174,15 @@ class Player {
             else {
                 this.speed = 4;
             }
-            
+
+            /**
+             * On aditionne le vitesse aux coordonnées x ou y en fonction de la touche appuyée
+             */
             this.x += this.speed;
+
+            /**
+             * On redessine le joueur avec les nouvelles coordonnées s'il n'y a pas d'obstacle sur le chemin
+             */
             ctx.beginPath();
             ctx.arc(this.x, this.y, 20, (this.fltOpen * 0.2) * Math.PI, (2 - this.fltOpen * 0.2) * Math.PI);
 
