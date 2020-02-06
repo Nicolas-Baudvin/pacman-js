@@ -77,7 +77,6 @@ class Player {
      *  Dessin du modèle joueur
      */
     draw = () => {
-        console.log(this.x, this.y)
         let ctx = this.canvas.getContext("2d");
         if (!this.isDraw) {
 
