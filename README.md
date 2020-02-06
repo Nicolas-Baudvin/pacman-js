@@ -10,10 +10,10 @@
 - [x] Collision Personnage => Mur de la carte
 - [x] Ennemis 
 - [ ] Déplacement des ennemis
+- [x] Collision Ennemis => Mur de la carte
 - [ ] Collision Ennemis => bordures
 - [ ] Collision Ennemis => Ennemis
 - [ ] Collision Ennemis => Personnage
-- [ ] Collision Ennemis => Mur de la carte
 - [ ] Placement des objets (pièces etc... à voir)
 - [ ] Collision joueur => objets
 - [ ] Collision Ennemis => objets 
