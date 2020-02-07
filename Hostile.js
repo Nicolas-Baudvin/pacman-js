@@ -13,11 +13,6 @@ class Hostile {
         this.done = false;
         this.moveDirection = this.name === "blinky" || this.name === "clyde" ? "left" : "right";
 
-        window.addEventListener("click", (e) => {
-            console.log(e.clientX, e.clientY);
-            console.log(this.name, this.x, this.y)
-        });
-
         this.img = new Image();
         this.img.addEventListener('load', this.draw);
         this.img.src = `./image/${name}.svg`;
@@ -39,47 +34,7 @@ class Hostile {
         }, 10);
     }
 
-    leaveSpawn = () => {
-        switch (this.name) {
-            case "blinky": {
-                console.log(true, this.x, this.y)
-                if (this.x <= 735) {
-                    this.moveRight();
-                }
-                if (this.x >= 736 && this.y >= 240) {
-                    this.moveUp();
-
-                }
-                if (this.y <= 240) {
-                    this.done = true;
-                }
-                break;
-            }
-            case "clyde": {
-                setTimeout(() => {
-
-                }, 3000);
-                break;
-            }
-            case "inky": {
-                setTimeout(() => {
-
-                }, 5000);
-                break;
-            }
-            case "pinky": {
-                setTimeout(() => {
-
-                }, 1500);
-                break;
-            }
-            default: {
-                break;
-            }
-        }
-    }
-
-    checkCollisionWithMap = () => {
+    checkCollision = () => {
 
         let pix;
         /**
@@ -131,6 +86,9 @@ class Hostile {
             if (rgba[0][0] !== 0 && rgba[0][1] !== 0 && rgba[0][2] !== 0 && rgba[0][3] !== 0) {
                 return true;
             }
+            else {
+                return false
+            }
         }
         else {
             return false;
@@ -138,110 +96,8 @@ class Hostile {
 
     }
 
-    changeDir = () => {
-        const dir = Math.floor(Math.random() * 2) + 1;
-        switch (this.moveDirection) {
-            case "right": {
-                if (dir === 1) {
-                    this.moveUp();
-                }
-                else if (dir === 2) {
-                    this.moveDown();
-                }
-                break;
-            }
-            case "left": {
-                if (dir === 1) {
-                    this.moveUp();
-                }
-                else if (dir === 2) {
-                    this.moveDown();
-                }
-                break;
-            }
-            case "up": {
-                if (dir === 1) {
-                    this.moveLeft();
-                }
-                else if (dir === 2) {
-                    this.moveRight();
-                }
-                break;
-            }
-            case "down": {
-                if (dir === 1) {
-                    this.moveLeft();
-                }
-                else if (dir === 2) {
-                    this.moveRight();
-                }
-                break;
-            }
-            default: {
-                break;
-            }
-        }
-    }
-
-    startMoving = () => {
-        switch (this.name) {
-            case "blinky": {
-
-                if (this.checkCollisionWithMap()) {
-                    console.log('collision avec un mur');
-                    this.speed = 0;
-                    this.changeDir();
-                }
-                else {
-                    if (this.moveDirection === "left") {
-
-
-                        this.speed = 4;
-                        this.moveLeft();
-
-                    }
-                    else if (this.moveDirection === "right") {
-
-                        this.speed = 4;
-                        this.moveRight();
-
-                    }
-                    else if (this.moveDirection === "down") {
-
-                        this.speed = 4;
-                        this.moveDown();
-
-                    }
-                    else if (this.moveDirection === "up") {
-
-                        this.speed = 4;
-                        this.moveUp();
-
-                    }
-                }
-
-                break;
-            }
-            case "clyde": {
-
-                break;
-            }
-            case "inky": {
-
-                break;
-            }
-            case "pinky": {
-
-                break;
-            }
-            default: {
-                break;
-            }
-        }
-    }
-
     moveRight = () => {
-        console.log("right")
+
         this.moveDirection = "right";
         this.ctx.clearRect(this.x, this.y, this.width, this.height);
         this.x += this.speed;
@@ -250,7 +106,7 @@ class Hostile {
     }
 
     moveLeft = () => {
-        console.log("left")
+
         this.moveDirection = "left";
         this.ctx.clearRect(this.x, this.y, this.width, this.height);
         this.x -= this.speed;
@@ -259,7 +115,7 @@ class Hostile {
     }
 
     moveUp = () => {
-        console.log("up")
+
         this.moveDirection = "up";
         this.ctx.clearRect(this.x, this.y, this.width, this.height);
         this.y -= this.speed;
@@ -268,7 +124,7 @@ class Hostile {
     }
 
     moveDown = () => {
-        console.log("down")
+
         this.moveDirection = "down";
         this.ctx.clearRect(this.x, this.y, this.width, this.height);
         this.y += this.speed;
