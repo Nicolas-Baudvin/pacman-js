@@ -126,8 +126,16 @@ class Player {
         if (rgba[0][0] === 0 && rgba[0][1] === 0 && rgba[0][2] === 0 && rgba[0][3] === 255) {
             return true;
         }
-        else if (rgba[Math.floor(rgba.length / 2)][0] === 0 && rgba[Math.floor(rgba.length / 2)][1] === 0 && rgba[Math.floor(rgba.length / 2)][2] === 0 && rgba[Math.floor(rgba.length / 2)][3] === 255) {
+        else if (rgba[Math.floor(rgba.length - rgba.length * 25 / 100)][0] === 0 && rgba[Math.floor(rgba.length - rgba.length * 25 / 100)][1] === 0 && rgba[Math.floor(rgba.length - rgba.length * 25 / 100)][2] === 0 && rgba[Math.floor(rgba.length - rgba.length * 25 / 100)][3] === 255) {
             return true
+        }
+        else if (rgba[Math.floor(rgba.length - rgba.length * 50 / 100)][0] === 0 && rgba[Math.floor(rgba.length - rgba.length * 50 / 100)][1] === 0 && rgba[Math.floor(rgba.length - rgba.length * 50 / 100)][2] === 0 && rgba[Math.floor(rgba.length - rgba.length * 50 / 100)][3] === 255) {
+
+            return true;
+        }
+        else if (rgba[Math.floor(rgba.length - rgba.length * 75 / 100)][0] === 0 && rgba[Math.floor(rgba.length - rgba.length * 75 / 100)][1] === 0 && rgba[Math.floor(rgba.length - rgba.length * 75 / 100)][2] === 0 && rgba[Math.floor(rgba.length - rgba.length * 75 / 100)][3] === 255) {
+
+            return true;
         }
         else if (rgba[rgba.length - 1][0] === 0 && rgba[rgba.length - 1][1] === 0 && rgba[rgba.length - 1][2] === 0 && rgba[rgba.length - 1][3] === 255) {
 
