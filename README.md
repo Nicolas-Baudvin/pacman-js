@@ -12,6 +12,10 @@
 - [x] Déplacement des ennemis
 - [x] Collision Ennemis => Mur de la carte
 - [x] Collision Ennemis => Ennemis
-- [x] Collision Ennemis => Personnage
+- [ ] Collision Ennemis => Personnage
 - [ ] Placement des objets (pièces etc... à voir)
 - [ ] Collision joueur => objets
+
+### V2
+
+- [ ] Déplacement des ennemis vers le joueur
