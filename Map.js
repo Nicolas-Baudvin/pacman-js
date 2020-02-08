@@ -19,6 +19,7 @@ class Map {
                 else if (wall == 0) {
                     ctx.fillStyle = 'white';
                     ctx.fillRect(j * 20, i * 20, 20, 20);
+                    console.log("this.x :", j*20, "this.y", i*20);
                 }
             }
         }
