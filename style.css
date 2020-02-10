@@ -2,7 +2,38 @@
     border: 1px solid grey;
     align-self: center;
 }
+
 body {
     display: flex;
     flex-direction: column;
+}
+
+.menu {
+    margin: 0 auto;
+}
+
+li {
+    list-style-type: none;
+    padding: .7em;
+    background: rgb(38, 133, 213);
+    background: linear-gradient(176deg, rgba(38, 133, 213, 1) 0%, rgba(21, 54, 83, 1) 100%);
+    border-radius: 3px;
+    /* border: 3px solid #bbb; */
+    width: 200px;
+    margin: 1em 0;
+    box-shadow: 0 0 10px grey;
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: .3s;
+    color: white;
+}
+
+li:hover {
+    box-shadow: 0 0 5px grey;
+    transition: .3s;
+    transform: translate(0, 1px);
+    background: rgb(27, 95, 153);
+    background: linear-gradient(176deg, rgba(27, 95, 153, 1) 0%, rgba(21, 54, 83, 1) 100%);
 }
