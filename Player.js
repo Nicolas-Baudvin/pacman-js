@@ -154,106 +154,132 @@ class Player {
 
     /**
      * Logique de vérification d'une collision avec un ennemi.
+     * TODO: Semble fonctionner uniquement avec un element plus grand que le joueur.
      */
-    checkCollisionWithHostiles = (
-        playerWidth = 20,
-        playerHeight = 20,
-        hostileWidth = 60,
-        hostileHeight = 60
+    checkCollisionWithElements = (
+        playerWidth,
+        playerHeight,
+        elementWidth,
+        elementHeight,
+        elements
     ) => {
-        const hostiles = app.hostiles;
-        hostiles.forEach((hostile) => {
+        elements.forEach((element, index) => {
 
             if (
                 this.rightPressed || this.leftPressed ?
                     (
                         this.rightPressed ?
-                            this.x + playerWidth > hostile.getPosX() :
-                            this.x - playerWidth > hostile.getPosX()
+                            this.x + playerWidth > element.getPosX() :
+                            this.x - playerWidth > element.getPosX()
                     ) &&
                     (
                         this.rightPressed ?
-                            this.x + playerWidth < hostile.getPosX() + hostileWidth :
-                            this.x - playerWidth < hostile.getPosX() + hostileWidth
+                            this.x + playerWidth < element.getPosX() + elementWidth :
+                            this.x - playerWidth < element.getPosX() + elementWidth
                     ) :
-                    this.y - playerHeight < hostile.getPosY() + hostileHeight &&
-                    this.y + playerHeight > hostile.getPosY()
+                    this.y - playerHeight < element.getPosY() + elementHeight &&
+                    this.y + playerHeight > element.getPosY()
             ) {
-
+                console.log("collision 1 0")
                 if (
                     this.rightPressed || this.leftPressed ?
-                        this.y + playerHeight < hostile.getPosY() + hostileHeight :
-                        this.x - playerWidth > hostile.getPosX()
+                        this.y + playerHeight < element.getPosY() + elementHeight :
+                        this.x - playerWidth > element.getPosX()
                 ) {
-
+                    console.log("collision 1 1")
                     if (this.leftPressed || this.rightPressed ?
-                        this.y + playerHeight > hostile.getPosY() :
-                        this.x - playerWidth < hostile.getPosX() + hostileWidth
+                        this.y + playerHeight > element.getPosY() :
+                        this.x - playerWidth < element.getPosX() + elementWidth
                     ) {
+                        console.log("collision 1 2")
                         this.leftPressed || this.rightPressed ?
                             (this.rightPressed ?
-                                this.x = hostile.getPosX() - playerWidth :
-                                this.x = hostile.getPosX() + hostileWidth + playerWidth
+                                this.x = element.getPosX() - playerWidth :
+                                this.x = element.getPosX() + elementWidth + playerWidth
                             ) :
                             (this.upPressed ?
-                                this.y = hostile.getPosY() + hostileHeight + playerHeight :
-                                this.y = hostile.getPosY() - playerHeight - 1
+                                this.y = element.getPosY() + elementHeight + playerHeight :
+                                this.y = element.getPosY() - playerHeight - 1
                             )
+                            
+                            if (element.getType() === "coin") {
+                                element.remove();
+                                app.coins.splice(index, 1);
+                            }
                     }
 
                     if (this.leftPressed || this.rightPressed ?
-                        this.y + playerHeight === hostile.getPosY() + hostileHeight :
-                        this.x - playerWidth === hostile.getPosX()
+                        this.y + playerHeight === element.getPosY() + elementHeight :
+                        this.x - playerWidth === element.getPosX()
                     ) {
+                        console.log("collision 1 3")
                         this.leftPressed || this.rightPressed ?
                             (this.rightPressed ?
-                                this.x = hostile.getPosX() - playerWidth :
-                                this.x = hostile.getPosX() + hostileWidth + playerWidth
+                                this.x = element.getPosX() - playerWidth :
+                                this.x = element.getPosX() + elementWidth + playerWidth
                             ) :
                             (this.upPressed ?
-                                this.y = hostile.getPosY() + hostileHeight + playerHeight :
-                                this.y = hostile.getPosY() - playerHeight - 1
+                                this.y = element.getPosY() + elementHeight + playerHeight :
+                                this.y = element.getPosY() - playerHeight - 1
                             )
+                            
+                            if (element.getType() === "coin") {
+                                element.remove();
+                                app.coins.splice(index, 1);
+                            }
                     }
 
                 }
 
                 if (
                     this.leftPressed || this.rightPressed ?
-                        this.y - playerHeight < hostile.getPosY() + hostileHeight :
-                        this.x + playerWidth > hostile.getPosX()
+                        this.y - playerHeight < element.getPosY() + elementHeight :
+                        this.x + playerWidth > element.getPosX()
                 ) {
-
+                    console.log("collision 2 1")
                     if (
                         this.rightPressed || this.leftPressed ?
-                            this.y - playerHeight > hostile.getPosY() :
-                            this.x + playerWidth < hostile.getPosX() + hostileWidth
+                            this.y - playerHeight > element.getPosY() :
+                            this.x + playerWidth < element.getPosX() + elementWidth
                     ) {
+                        console.log("collision 2 2")
                         this.leftPressed || this.rightPressed ?
                             (this.rightPressed ?
-                                this.x = hostile.getPosX() - playerWidth :
-                                this.x = hostile.getPosX() + hostileWidth + playerWidth
+                                this.x = element.getPosX() - playerWidth :
+                                this.x = element.getPosX() + elementWidth + playerWidth
                             ) :
                             (this.upPressed ?
-                                this.y = hostile.getPosY() + hostileHeight + playerHeight :
-                                this.y = hostile.getPosY() - playerHeight - 2
+                                this.y = element.getPosY() + elementHeight + playerHeight :
+                                this.y = element.getPosY() - playerHeight - 2
                             )
+                            ;
+                            if (element.getType() === "coin") {
+                                element.remove();
+                                app.coins.splice(index, 1);
+                            }
+
                     }
 
                     if (
                         this.leftPressed || this.rightPressed ?
-                            this.y - playerHeight === hostile.getPosY() :
-                            this.x + playerWidth === hostile.getPosX() + hostileWidth
+                            this.y - playerHeight === element.getPosY() :
+                            this.x + playerWidth === element.getPosX() + elementWidth
                     ) {
+                        console.log("collision 2 3")
                         this.leftPressed || this.rightPressed ?
                             (this.rightPressed ?
-                                this.x = hostile.getPosX() - playerWidth :
-                                this.x = hostile.getPosX() + hostileWidth + playerWidth
+                                this.x = element.getPosX() - playerWidth :
+                                this.x = element.getPosX() + elementWidth + playerWidth
                             ) :
                             (this.upPressed ?
-                                this.y = hostile.getPosY() + hostileHeight + playerHeight :
-                                this.y = hostile.getPosY() - playerHeight - 2
+                                this.y = element.getPosY() + elementHeight + playerHeight :
+                                this.y = element.getPosY() - playerHeight - 2
                             )
+                            
+                            if (element.getType() === "coin") {
+                                element.remove();
+                                app.coins.splice(index, 1);
+                            }
                     }
 
                 }
@@ -296,7 +322,9 @@ class Player {
             /**
              * Logique de vérification d'une collision avec un ennemi.
              */
-            this.checkCollisionWithHostiles();
+            this.checkCollisionWithElements(20, 20, 60, 60, app.hostiles);
+
+            this.checkCollisionWithElements(20, 20, 40, 40, app.coins);
 
             /**
              * On redessine le joueur avec les nouvelles coordonnées s'il n'y a pas d'obstacle sur le chemin
@@ -331,7 +359,9 @@ class Player {
 
             this.x -= this.speed;
 
-            this.checkCollisionWithHostiles();
+            this.checkCollisionWithElements(20, 20, 60, 60, app.hostiles);
+            this.checkCollisionWithElements(20, 20, 40, 40, app.coins);
+
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.width, (1 + this.fltOpen * 0.2) * Math.PI, (3 - this.fltOpen * 0.2) * Math.PI);
 
@@ -361,7 +391,9 @@ class Player {
 
             this.y -= this.speed;
 
-            this.checkCollisionWithHostiles();
+            this.checkCollisionWithElements(20, 20, 60, 60, app.hostiles);
+            this.checkCollisionWithElements(20, 20, 40, 40, app.coins);
+
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.width, (1.511 + this.fltOpen * 0.2) * Math.PI, (1.5 - this.fltOpen * 0.2) * Math.PI);
 
@@ -389,7 +421,9 @@ class Player {
             }
 
             this.y += this.speed;
-            this.checkCollisionWithHostiles();
+            this.checkCollisionWithElements(20, 20, 60, 60, app.hostiles);
+            this.checkCollisionWithElements(20, 20, 40, 40, app.coins);
+
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.width, (0.5 + this.fltOpen * 0.2) * Math.PI, (2.5 - this.fltOpen * 0.2) * Math.PI);
 
