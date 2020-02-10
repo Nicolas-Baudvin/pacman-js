@@ -3,6 +3,7 @@ class Hostile {
         this.x = posX;
         this.y = posY;
         this.name = name;
+        this.type = "hostile";
         this.canvas = document.querySelector('#canvas');
         this.isDraw = false;
         this.interval = "";
@@ -15,6 +16,12 @@ class Hostile {
         this.img = new Image();
         this.img.addEventListener('load', this.draw);
         this.img.src = `./image/${name}.svg`;
+    }
+
+    restart = () => {
+        this.x = undefined;
+        this.y = undefined;
+        clearInterval(this.interval);
     }
 
     draw = () => {
@@ -442,6 +449,10 @@ class Hostile {
         return this.y;
     }
 
+    getType = () => {
+        return this.type;
+    }
+
     setPosX = (pos) => {
         this.x = pos;
     }
@@ -456,9 +467,5 @@ class Hostile {
 
     getHeight = () => {
         return this.img.height;
-    }
-
-    die = () => {
-        clearInterval(this.interval);
     }
 }
