@@ -180,53 +180,59 @@ class Player {
                     this.y - playerHeight < element.getPosY() + elementHeight &&
                     this.y + playerHeight > element.getPosY()
             ) {
-                console.log("collision 1 0")
                 if (
                     this.rightPressed || this.leftPressed ?
                         this.y + playerHeight < element.getPosY() + elementHeight :
                         this.x - playerWidth > element.getPosX()
                 ) {
-                    console.log("collision 1 1")
                     if (this.leftPressed || this.rightPressed ?
                         this.y + playerHeight > element.getPosY() :
                         this.x - playerWidth < element.getPosX() + elementWidth
                     ) {
-                        console.log("collision 1 2")
-                        this.leftPressed || this.rightPressed ?
-                            (this.rightPressed ?
-                                this.x = element.getPosX() - playerWidth :
-                                this.x = element.getPosX() + elementWidth + playerWidth
-                            ) :
-                            (this.upPressed ?
-                                this.y = element.getPosY() + elementHeight + playerHeight :
-                                this.y = element.getPosY() - playerHeight - 1
-                            )
-                            
-                            if (element.getType() === "coin") {
-                                element.remove();
-                                app.coins.splice(index, 1);
-                            }
+                        if (element.getType() === "coin") {
+                            element.remove();
+                            app.coins.splice(index, 1);
+                        }
+                        else {
+
+                            this.leftPressed || this.rightPressed ?
+                                (this.rightPressed ?
+                                    this.x = element.getPosX() - playerWidth :
+                                    this.x = element.getPosX() + elementWidth + playerWidth
+                                ) :
+                                (this.upPressed ?
+                                    this.y = element.getPosY() + elementHeight + playerHeight :
+                                    this.y = element.getPosY() - playerHeight - 1
+                                )
+                                this.die();
+                        }
+
+
                     }
 
                     if (this.leftPressed || this.rightPressed ?
                         this.y + playerHeight === element.getPosY() + elementHeight :
                         this.x - playerWidth === element.getPosX()
                     ) {
-                        console.log("collision 1 3")
-                        this.leftPressed || this.rightPressed ?
-                            (this.rightPressed ?
-                                this.x = element.getPosX() - playerWidth :
-                                this.x = element.getPosX() + elementWidth + playerWidth
-                            ) :
-                            (this.upPressed ?
-                                this.y = element.getPosY() + elementHeight + playerHeight :
-                                this.y = element.getPosY() - playerHeight - 1
-                            )
-                            
-                            if (element.getType() === "coin") {
-                                element.remove();
-                                app.coins.splice(index, 1);
-                            }
+                        if (element.getType() === "coin") {
+                            element.remove();
+                            app.coins.splice(index, 1);
+                        }
+                        else {
+
+                            this.leftPressed || this.rightPressed ?
+                                (this.rightPressed ?
+                                    this.x = element.getPosX() - playerWidth :
+                                    this.x = element.getPosX() + elementWidth + playerWidth
+                                ) :
+                                (this.upPressed ?
+                                    this.y = element.getPosY() + elementHeight + playerHeight :
+                                    this.y = element.getPosY() - playerHeight - 1
+                                )
+                                this.die();
+                        }
+
+
                     }
 
                 }
@@ -236,27 +242,29 @@ class Player {
                         this.y - playerHeight < element.getPosY() + elementHeight :
                         this.x + playerWidth > element.getPosX()
                 ) {
-                    console.log("collision 2 1")
                     if (
                         this.rightPressed || this.leftPressed ?
                             this.y - playerHeight > element.getPosY() :
                             this.x + playerWidth < element.getPosX() + elementWidth
                     ) {
-                        console.log("collision 2 2")
-                        this.leftPressed || this.rightPressed ?
-                            (this.rightPressed ?
-                                this.x = element.getPosX() - playerWidth :
-                                this.x = element.getPosX() + elementWidth + playerWidth
-                            ) :
-                            (this.upPressed ?
-                                this.y = element.getPosY() + elementHeight + playerHeight :
-                                this.y = element.getPosY() - playerHeight - 2
-                            )
-                            ;
-                            if (element.getType() === "coin") {
-                                element.remove();
-                                app.coins.splice(index, 1);
-                            }
+                        if (element.getType() === "coin") {
+                            element.remove();
+                            app.coins.splice(index, 1);
+                        }
+                        else {
+
+                            this.leftPressed || this.rightPressed ?
+                                (this.rightPressed ?
+                                    this.x = element.getPosX() - playerWidth :
+                                    this.x = element.getPosX() + elementWidth + playerWidth
+                                ) :
+                                (this.upPressed ?
+                                    this.y = element.getPosY() + elementHeight + playerHeight :
+                                    this.y = element.getPosY() - playerHeight - 2
+                                );
+                                this.die();
+                        }
+
 
                     }
 
@@ -265,21 +273,26 @@ class Player {
                             this.y - playerHeight === element.getPosY() :
                             this.x + playerWidth === element.getPosX() + elementWidth
                     ) {
-                        console.log("collision 2 3")
-                        this.leftPressed || this.rightPressed ?
-                            (this.rightPressed ?
-                                this.x = element.getPosX() - playerWidth :
-                                this.x = element.getPosX() + elementWidth + playerWidth
-                            ) :
-                            (this.upPressed ?
-                                this.y = element.getPosY() + elementHeight + playerHeight :
-                                this.y = element.getPosY() - playerHeight - 2
-                            )
-                            
-                            if (element.getType() === "coin") {
-                                element.remove();
-                                app.coins.splice(index, 1);
-                            }
+
+                        if (element.getType() === "coin") {
+                            element.remove();
+                            app.coins.splice(index, 1);
+                        }
+                        else {
+
+                            this.leftPressed || this.rightPressed ?
+                                (this.rightPressed ?
+                                    this.x = element.getPosX() - playerWidth :
+                                    this.x = element.getPosX() + elementWidth + playerWidth
+                                ) :
+                                (this.upPressed ?
+                                    this.y = element.getPosY() + elementHeight + playerHeight :
+                                    this.y = element.getPosY() - playerHeight - 2
+                                )
+                                this.die();
+                        }
+
+
                     }
 
                 }
@@ -439,18 +452,19 @@ class Player {
 
     }
 
-    getHit = (damage) => {
-        this.life = this.life - damage;
-        if (this.life <= 0) {
-            console.log('PERDU');
-            return this.life;
-        }
+    restart = () => {
+        app.score = 0;
+        clearInterval(this.interval);
+        this.x = null;
+        this.y = null;
     }
 
     die = () => {
         app.score = 0;
         clearInterval(this.interval);
-        this.draw();
+        this.x = null;
+        this.y = null;
+        app.restart();
     }
 
 }
