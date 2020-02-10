@@ -6,9 +6,10 @@ class Coin {
         this.img = "";
         this.height = "";
         this.width = "";
+        this.type = "coin"
         this.img = new Image();
         this.img.addEventListener('load', this.draw);
-        this.img.src = "./image/coin.svg";
+        this.img.src = "./image/coin.gif";
     }
 
     draw = () => {
@@ -26,8 +27,13 @@ class Coin {
         return this.y;
     }
 
+    getType = () => {
+        return this.type;
+    }
+
     remove = () => {
-        this.ctx.clearRect(this.x, this.y, thix.x + 20, this.y + 20);
+        this.ctx.clearRect(this.x, this.y, 40, 40);
         app.score++;
+        document.querySelector('.score').innerText = `Votre score est de : ${app.score}`;
     }
 }
