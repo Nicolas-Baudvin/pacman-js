@@ -15,7 +15,7 @@
 - [x] Placement des objets (pièces etc... à voir)
 - [x] Collision joueur => objets
 - [x] Gain de point
-- [x] Game over lors de la collision Joueur => Pièces
+- [x] Game over lors de la collision Joueur => Hostiles
 - [ ] Collision Ennemis => Personnage
 
 ### V2
