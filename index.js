@@ -16,7 +16,8 @@ var app = {
         app.y = app.canvas.height - 60;
         window.addEventListener('keydown', app.keyDownHandler, false);
         window.addEventListener('keyup', app.KeyUpHandler, false);
-        app.currentPlayer = new Player(100, app.canvas.width / 2 + 20, app.canvas.height - 410);
+        document.querySelector('.restart').addEventListener('click', app.restart);
+        app.currentPlayer = new Player(100, app.canvas.width / 2 + 10, app.canvas.height - 410);
 
         app.hostilesName.forEach((name) => {
             let posY;
@@ -51,6 +52,21 @@ var app = {
             app.hostiles.push(hostile);
         })
 
+    },
+
+    restart: () => {
+        document.querySelector('.score').innterText = `Votre score est de : ${app.score}`;
+        app.hostiles.forEach((hostile) => {
+            hostile.restart();
+        });
+        app.coins.forEach((coin) => {
+            coin.restart();
+        });
+        app.currentPlayer.restart();
+        app.coins = [];
+        app.hostiles = [];
+        app.currentPlayer = "";
+        app.init();
     },
 
     displayMap: () => {
