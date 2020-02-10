@@ -1,6 +1,5 @@
 class Map {
     constructor(map) {
-        this.counter = 0;
         this.map = map;
         this.canvas = document.querySelector('#canvas');
         this.drawMap();
@@ -20,19 +19,10 @@ class Map {
                 else if (wall == 0) {
                     ctx.fillStyle = 'white';
                     ctx.fillRect(j * 20, i * 20, 20, 20);
-                    if (this.map[i][j - 1] === 0 && this.map[i][j + 1] === 0) {
-                        if (this.map[i - 1][j] === 0 && this.map[i + 1][j] === 0 && this.map[i - 1][j - 1] === 0 && this.map[i + 1][j + 1] === 0 && this.map[i + 1][j - 1] === 0 && this.map[i - 1][j + 1] === 0) {
-
-                            if (this.counter === 3) {
-                                const coin = new Coin(j * 20, i * 20);
-                                app.coins.push(coin);
-                                this.counter = 0;
-                            }
-                            else {
-                                this.counter++;
-                            }
-                        }
-                    }
+                }
+                else if (wall == 2) {
+                    const coin = new Coin(j * 20, i * 20);
+                    app.coins.push(coin);
                 }
             }
         }
