@@ -16,8 +16,3 @@
 - [x] Collision joueur => objets
 - [x] Gain de point
 - [x] Game over lors de la collision Joueur => Hostiles
-- [ ] Collision Ennemis => Personnage
-
-### V2
-
-- [ ] Déplacement des ennemis vers le joueur
